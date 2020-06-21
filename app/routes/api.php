@@ -23,7 +23,7 @@ Route::post('login', 'Auth\AuthController@apiauth');
 
 Route::middleware(['api'])->group(function () {
     Route::resource('note', 'NoteController');
-    Route::post('note/addfile/{id}', 'NoteController@addfile');
+    Route::post('note/addfile/{id}', 'NoteController@addfile')->name('note.addfile');
     Route::get('note/restore/{id}', 'NoteController@restore')->name('note.restore');
 });
 

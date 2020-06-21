@@ -89,7 +89,7 @@ class NoteTest extends TestCase
      *
      * @return null
      */
-    public function testDeletedNote($params)
+    public function testDeletedNote(array $params)
     {
         $response = $this->delete(route('note.destroy', $params['id']) . '?token=' . $params['token']);
         $response
@@ -108,13 +108,38 @@ class NoteTest extends TestCase
      *
      * @return null
      */
-    public function testRestoreNote($params)
+    public function testRestoreNote(array $params)
     {
         $response = $this->get(route('note.restore', $params['id']) . '?token=' . $params['token']);
         $response
             ->assertOk()
             ->assertJson([
                 'id' => $params['id']
+            ]);
+    }
+
+    /**
+     * Added attache for note.
+     *
+     * @param array $params token and noteId
+     *
+     * @depends testAddNote
+     *
+     * @return void
+     */
+    public function testAddAttacheForNote(array $params)
+    {
+        // added atache
+        copy (__DIR__ . '/_files/_test.jpg', __DIR__ . '/_files/test.jpg');
+        $file = new \Illuminate\Http\UploadedFile (__DIR__ . '/_files/test.jpg', 'test.jpg', 'image/jpeg', null, 0, true);
+
+        $response = $this->postJson(route('note.addfile', $params['id']) . '?token=' . $params['token'], [
+            'attache' => $file,
+        ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'file' => $params['id'] . '.jpg',
             ]);
     }
 }
