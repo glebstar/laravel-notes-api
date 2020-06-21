@@ -87,7 +87,7 @@ class NoteTest extends TestCase
      *
      * @depends testAddNote
      *
-     * @return null
+     * @return void
      */
     public function testDeletedNote(array $params)
     {
@@ -106,7 +106,7 @@ class NoteTest extends TestCase
      *
      * @depends testAddNote
      *
-     * @return null
+     * @return void
      */
     public function testRestoreNote(array $params)
     {
@@ -141,5 +141,22 @@ class NoteTest extends TestCase
             ->assertJson([
                 'file' => $params['id'] . '.jpg',
             ]);
+
+
+    }
+
+    /**
+     * Get notes for user
+     *
+     * @param array $params token and noteId
+     *
+     * @depends testAddNote
+     *
+     * @return void
+     */
+    public function testGetNotes(array $params)
+    {
+        $response = $this->get(route('note.index') . '?token=' . $params['token']);
+        $response->assertOk();
     }
 }

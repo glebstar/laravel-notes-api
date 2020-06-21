@@ -17,11 +17,24 @@ class NoteController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $page = (int)$request->input ('page');
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $limit  = 10;
+        $offset = ( $page - 1 ) * $limit;
+
+        return response ()->json (
+            Note::where ('user_id', \JWTAuth::parseToken()->authenticate()->id)
+                ->skip ($offset)->take ($limit)
+                ->get ()
+        );
     }
 
     /**
