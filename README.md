@@ -9,4 +9,4 @@
 + Run `docker-compose exec php-fpm bash`
 + Run `composer install`
 + Run `php artisan migrate`
-+ Run `php artisan test
++ Run `php artisan test`
