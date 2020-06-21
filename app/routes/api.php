@@ -20,3 +20,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register', 'Auth\AuthController@apiregister');
 Route::post('login', 'Auth\AuthController@apiauth');
+
+Route::middleware(['api'])->group(function () {
+    Route::resource('note', 'NoteController');
+    Route::post('note/addfile/{id}', 'NoteController@addfile');
+    Route::get('note/restore/{id}', 'NoteController@restore')->name('note.restore');
+});
+
+Route::group([
+    'middleware' => 'api',
+], function ($router) {
+
+});
