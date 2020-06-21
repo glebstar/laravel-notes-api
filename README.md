@@ -1,6 +1,6 @@
 # laravel notes api
 
-### create custom notes
+User creating notes, adding files to notes. Work with api can be seen in the attached tests
 
 # Installation
 + To get started, the following steps needs to be taken:
