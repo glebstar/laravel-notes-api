@@ -131,7 +131,7 @@ class NoteTest extends TestCase
     {
         // added atache
         copy (__DIR__ . '/_files/_test.jpg', __DIR__ . '/_files/test.jpg');
-        $file = new \Illuminate\Http\UploadedFile (__DIR__ . '/_files/test.jpg', 'test.jpg', 'image/jpeg', null, 0, true);
+        $file = new \Illuminate\Http\UploadedFile (__DIR__ . '/_files/test.jpg', 'test.jpg', 'image/jpeg', null, true, true);
 
         $response = $this->postJson(route('note.addfile', $params['id']) . '?token=' . $params['token'], [
             'attache' => $file,
