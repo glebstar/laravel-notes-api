@@ -6,7 +6,7 @@ User creating notes, adding files to notes. Work with api can be seen in the att
 + To get started, the following steps needs to be taken:
 + Clone the repo.
 + `cd laravel-notes-api` to the project directory.
-+ `cp .env.example .env` to use env config file
++ `cp app/.env.example app/.env` to use env config file
 + Run `docker-compose up -d` to start the containers.
 + Run `docker-compose exec php-fpm bash`
 + Run `composer install`

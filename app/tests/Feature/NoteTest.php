@@ -6,6 +6,7 @@ use App\User;
 use App\Note;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class NoteTest extends TestCase
@@ -131,7 +132,7 @@ class NoteTest extends TestCase
     {
         // added atache
         copy (__DIR__ . '/_files/_test.jpg', __DIR__ . '/_files/test.jpg');
-        $file = new \Illuminate\Http\UploadedFile (__DIR__ . '/_files/test.jpg', 'test.jpg', 'image/jpeg', null, true, true);
+        $file = new UploadedFile (__DIR__ . '/_files/test.jpg', 'test.jpg', 'image/jpeg', null, true, true);
 
         $response = $this->postJson(route('note.addfile', $params['id']) . '?token=' . $params['token'], [
             'attache' => $file,
