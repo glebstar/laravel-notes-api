@@ -5,10 +5,29 @@ namespace App\Services;
 use App\Note;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use phpDocumentor\Reflection\Types\Integer;
 
 class NoteService
 {
+    /**
+     * List Notes
+     *
+     * @param int $page
+     * @return mixed
+     */
+    public function listNotes(int $page)
+    {
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $limit  = 10;
+        $offset = ( $page - 1 ) * $limit;
+
+        return Note::where ('user_id', \JWTAuth::parseToken()->authenticate()->id)
+            ->skip ($offset)->take ($limit)
+            ->get ();
+    }
+
     /**
      * Add File
      *

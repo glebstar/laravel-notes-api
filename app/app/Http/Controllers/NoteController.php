@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 use App\Note;
 use App\Http\Requests\NoteStoreRequest;
 use App\Http\Requests\NoteAddFileRequest;
+use App\Http\Resources\NoteResource;
 
 class NoteController extends Controller
 {
@@ -33,17 +32,11 @@ class NoteController extends Controller
     public function index(Request $request)
     {
         $page = (int)$request->input ('page');
-        if ($page < 1) {
-            $page = 1;
-        }
-
-        $limit  = 10;
-        $offset = ( $page - 1 ) * $limit;
 
         return response ()->json (
-            Note::where ('user_id', \JWTAuth::parseToken()->authenticate()->id)
-                ->skip ($offset)->take ($limit)
-                ->get ()
+            NoteResource::collection(
+                $this->noteService->listNotes($page)
+            )
         );
     }
 
@@ -60,7 +53,7 @@ class NoteController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
-        return response()->json($note);
+        return response()->json(NoteResource::make($note));
     }
 
     /**
@@ -82,7 +75,7 @@ class NoteController extends Controller
             return response ()->json (['error' => 'not access'], 401);
         }
 
-        return response ()->json ($note);
+        return response ()->json (NoteResource::make($note));
     }
 
     /**
@@ -130,7 +123,7 @@ class NoteController extends Controller
         }
 
         $note->restore();
-        return response ()->json ($note);
+        return response ()->json (NoteResource::make($note));
     }
 
     /**
@@ -156,6 +149,6 @@ class NoteController extends Controller
 
         $note = $this->noteService->addfile($note, $request->file ('attache'), $id);
 
-        return response ()->json ($note);
+        return response ()->json (NoteResource::make($note));
     }
 }
