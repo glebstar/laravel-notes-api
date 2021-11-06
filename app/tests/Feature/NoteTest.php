@@ -63,6 +63,9 @@ class NoteTest extends TestCase
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The given data was invalid.',
+                'errors' => [
+                    'note' => ['The note field is required.'],
+                ],
             ]);
 
         $note = factory(Note::class)->make();

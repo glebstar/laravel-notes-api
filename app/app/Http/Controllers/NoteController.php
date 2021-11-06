@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Note;
 use App\Http\Requests\NoteStoreRequest;
+use App\Http\Requests\NoteAddFileRequest;
 
 class NoteController extends Controller
 {
-    public function __construct()
+    /**
+     * @var NoteService
+     */
+    private $noteService;
+
+    public function __construct(NoteService $noteService)
     {
         $this->middleware('auth:api');
+        $this->noteService = $noteService;
     }
 
     /**
@@ -128,12 +136,12 @@ class NoteController extends Controller
     /**
      * Adds a file to a note
      *
-     * @param integer $id      Note ID
-     * @param Request $request Request
+     * @param integer $id Note ID
+     * @param NoteAddFileRequest $request Request
      *
      * @return JsonResponse
      */
-    public function addfile($id, Request $request)
+    public function addfile($id, NoteAddFileRequest $request)
     {
         $note = Note::where ('id', $id)
             ->first ();
@@ -146,26 +154,7 @@ class NoteController extends Controller
             return response ()->json (['error' => 'not access'], 401);
         }
 
-        $validator = Validator::make ($request->all (), [
-            'attache' => 'required|mimes:jpeg,png',
-        ]);
-
-        if ($validator->fails ()) {
-            return response ()->json ($validator->messages (), 400);
-        }
-
-        $attache  = $request->file ('attache');
-        $fileName = $id . '.' . $attache->getClientOriginalExtension ();
-
-        if ($note->file && Storage::exists($note->file)) {
-            Storage::delete($note->file);
-        }
-
-        Storage::put($fileName, file_get_contents($attache));
-        unlink ($attache->getPathname ());
-
-        $note->file = $fileName;
-        $note->save ();
+        $note = $this->noteService->addfile($note, $request->file ('attache'), $id);
 
         return response ()->json ($note);
     }
