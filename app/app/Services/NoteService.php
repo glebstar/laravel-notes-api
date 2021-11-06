@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Note;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,7 +13,7 @@ class NoteService
      * List Notes
      *
      * @param int $page
-     * @return mixed
+     * @return Collection
      */
     public function listNotes(int $page)
     {
