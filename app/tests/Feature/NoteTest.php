@@ -60,9 +60,9 @@ class NoteTest extends TestCase
 
         $response = $this->postJson(route('note.store') . '?token=' . $token);
         $response
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJson([
-                'note' => ['The note field is required.']
+                'message' => 'The given data was invalid.',
             ]);
 
         $note = factory(Note::class)->make();

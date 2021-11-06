@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Note;
+use App\Http\Requests\NoteStoreRequest;
 
 class NoteController extends Controller
 {
@@ -41,19 +42,11 @@ class NoteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param NoteStoreRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(NoteStoreRequest $request)
     {
-        $validator = Validator::make ($request->all (), [
-            'note' => 'required',
-        ]);
-
-        if ($validator->fails ()) {
-            return response ()->json ($validator->getMessageBag (), 400);
-        }
-
         $note = Note::create([
             'text' => $request->note,
             'user_id' => auth()->user()->id,
