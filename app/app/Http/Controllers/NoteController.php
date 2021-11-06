@@ -130,7 +130,7 @@ class NoteController extends Controller
      * Adds a file to a note
      *
      * @param integer $id Note ID
-     * @param NoteAddFileRequest $request Request
+     * @param NoteAddFileRequest $request
      *
      * @return JsonResponse
      */
